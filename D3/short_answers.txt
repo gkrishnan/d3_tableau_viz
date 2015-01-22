@@ -1,0 +1,9 @@
+1.3.c. Sqrt coolness works much better. The range of the values in this case is 1 to 256. So any linear scaling would cause some of the nodes to either become too huge or others become too small. Square root function gets the node sizes into an optimal range which can be easily depicted on the graph.
+
+1.4. The filtering has improved the user experience, since the labels are more readable and highlights cooler nodes rather than cluttering the graph with all available and non-important node labels. This depicts the high data to ink ratio property from class and provides a clean and clutter free UX.
+
+1.7b. The visualization was improved by
+  1. Making tooltips readable by increasing text size to 14, adding aesthetic color      schemes.
+  2. Charge of the graph was changed to -200 and the linkdistance to 80, in order to      increase repulsion and better positioning.
+  3. Increased height to 700, increasing area of graph.
+  4. Added a collision detection function so that nodes do not overlap

@@ -1,0 +1,42 @@
+[
+  {
+    "Vehicle Name":"Audi 3.2 TT Cvrt",
+    "Retail Price":40590,
+    "Engine Size (l)":3.2,
+    "HP":250,
+    "City MPG":21,
+    "Hwy MPG":29
+  },
+  {
+    "Vehicle Name":"BMW M3 Cvrt",
+    "Retail Price":56595,
+    "Engine Size (l)":3.2,
+    "HP":333,
+    "City MPG":16,
+    "Hwy MPG":23
+  },
+  {
+    "Vehicle Name":"Jaguar XKR Cvrt",
+    "Retail Price":86995,
+    "Engine Size (l)":4.2,
+    "HP":390,
+    "City MPG":16,
+    "Hwy MPG":23
+  },
+  {
+    "Vehicle Name":"SL600 Cvrt",
+    "Retail Price":126670,
+    "Engine Size (l)":5.5,
+    "HP":493,
+    "City MPG":13,
+    "Hwy MPG":19
+  },
+  {
+    "Vehicle Name":"Mustang GT Cvrt",
+    "Retail Price":29380,
+    "Engine Size (l)":4.6,
+    "HP":260,
+    "City MPG":17,
+    "Hwy MPG":25
+  }
+]

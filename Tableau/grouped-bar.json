@@ -1,0 +1,18 @@
+[
+  {
+    "Attributes":"City MPG",
+    "Audi 3.2 TT Cvrt":21,
+    "BMW M3 Cvrt":16,
+    "Jaguar XKR Cvrt":16,
+    "SL600 Cvrt":13,
+    "Mustang GT Cvrt":17
+  },
+  {
+    "Attributes":"Hwy MPG",
+    "Audi 3.2 TT Cvrt":29,
+    "BMW M3 Cvrt":23,
+    "Jaguar XKR Cvrt":23,
+    "SL600 Cvrt":19,
+    "Mustang GT Cvrt":25
+  }
+]

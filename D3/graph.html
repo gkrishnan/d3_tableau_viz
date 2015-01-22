@@ -1,0 +1,219 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.node text {
+  font: 14px helvetica;
+}
+
+.link {
+  stroke: #999;
+  stroke-opacity: .6;
+}
+
+.d3-tip{
+  line-height: 1;
+  #font-weight: bold;
+  padding: 6px;
+  background: rgba(0, 0, 0, 0.4);
+  color: #fff;
+  border-radius: 1px;
+}
+
+.d3-tip text {
+    fill: #fff;
+    font-size: 14px;
+    stroke: black;
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+  }
+
+circle {
+    fill: #ccc;
+    fill-opacity: 0.8;
+    stroke: #bbb;
+    stroke-width: 1px;
+  }
+
+circle:hover {
+    fill: #bbb;
+    stroke: #999;
+  }
+
+circle.clickable:hover {
+    cursor: pointer;
+  }
+
+.rule {
+    stroke-width: 1px;
+    stroke: #c00;
+    shape-rendering: crispedges;
+  }
+</style>
+
+<head>
+<title>Victor Hugo Had No Internet</title>
+</head>
+
+<body>
+
+<!--
+Alternate usage, presently using local files for the assignment respecting project structure
+<script src="http://d3js.org/d3.v3.min.js"></script>
+<script src="http://d3js.org/colorbrewer.v1.min.js"></script>
+<script src="http://labratrevenge.com/d3-tip/javascripts/d3.tip.v0.6.3.js"></script>
+-->
+
+<script src="d3/d3.v3.min.js"></script>
+<script src="d3/colorbrewer.v1.min.js"></script>
+<script src="d3/d3-tip.js"></script>
+<script>
+
+//Size of region to render on
+var width = 960,
+    height = 700;
+
+var color = d3.scale.ordinal()
+.range(colorbrewer.RdYlBu[10])  //Use the 10 class colorbrewer scheme RdYlBu which is color blind safe
+
+var newScale = d3.scale.linear()  //Parameters used for linear scaling
+    .domain([1,256])
+    .range([1,256]);              //This was later set to .range[1,50] for more optimal scaling/display
+
+//D3 force directed layout
+//Try playing with the charge and link distance
+var force = d3.layout.force()
+    .charge(-200)
+    .linkDistance(80)
+    .size([width, height]);
+
+
+function dragmove(d, i) {
+    d.px += d3.event.dx;
+    d.py += d3.event.dy;
+    d.x += d3.event.dx;
+    d.y += d3.event.dy; 
+  }
+
+//Add our canvas
+var svg = d3.select("body").append("svg")
+    .attr("width", width)
+    .attr("height", height);
+
+//Select the miserables data ;)
+d3.json("miserables.json", function(error, graph) {
+  force
+      .nodes(graph.nodes)
+      .links(graph.links)
+      .start();
+
+tip = d3.tip()
+      .attr('class', 'd3-tip')
+      .html(function(d) { return "Name: " + d.name + ", Group: "+ d.group + ", Coolness: " + d.coolness; });
+
+//Add the links
+  var link = svg.selectAll(".link")
+      .data(graph.links)
+      .enter().append("line")
+      .attr("class", "link")
+      .style("stroke-width", function(d) { return Math.sqrt(d.value); });
+
+//Add the nodes
+  var node = svg.selectAll(".node")
+      .data(graph.nodes)
+      .enter()
+      .append("g")
+      .attr("class", "node")
+      .call(force.drag)
+      
+     node.call(tip) 
+
+      node.append("circle")
+      //.attr("class", "node")
+      // .attr("r", function(d){ return newScale(d.coolness);}) //For the linear scale part
+      .attr("r", function(d){ return Math.sqrt(d.coolness);})
+      .on('mouseover', tip.show) //++
+      .on('mouseout', tip.hide) //++
+      .on("dblclick", connectedNodes)
+      .on("drag", dragmove)
+     .style("fill", function (d) {
+        return color(d.group);})
+	  
+      node.append("text")
+      .attr("dx", 10)
+      .attr("dy", ".35em")
+      .text(function(d) { if(d.coolness > 25) return d.name }) //Coolness < 25 do not display
+      //.text(function(d) { return d.name })
+      .style("stroke", "none");
+
+//Toggle stores whether the highlighting is on
+
+function connectedNodes() { //highlight on or off based on this function on double click
+    d = d3.select(this).node().__data__;
+
+    if (d.fixed == false) {
+        d = d3.select(this).node().__data__;
+        d.fixed = true;
+        d3.select(this).style("stroke","#000000").style("stroke-width","3")
+    } else if(d.fixed == true){
+        d = d3.select(this).node().__data__;
+        //Put them back to older stroke and stroke width
+        d.fixed = false;
+        d3.select(this).style("stroke","#bbb").style("stroke-width","1.5")
+    }
+}
+
+//Update stuff for animation:
+//   This takes the physics simulation for the force directed graph and
+//   sets the location of the nodes and edges to the new positions
+  force.on("tick", function() {
+    link.attr("x1", function(d) { return d.source.x; })
+        .attr("y1", function(d) { return d.source.y; })
+        .attr("x2", function(d) { return d.target.x; })
+        .attr("y2", function(d) { return d.target.y; });
+
+    d3.selectAll("circle").attr("cx", function(d) { return d.x; })
+        .attr("cy", function(d) { return d.y; });
+
+    d3.selectAll("text").attr("x", function (d) { return d.x;  })
+         .attr("y", function (d) { return d.y; });
+    });
+     node.each(collide(1.0)); 
+
+
+var padding = 1, // separation between circles
+    radius=8;
+
+function collide(alpha) {
+  var quadtree = d3.geom.quadtree(graph.nodes);
+  return function(d) {
+    var rb = 2*radius + padding,
+        nx1 = d.x - rb,
+        nx2 = d.x + rb,
+        ny1 = d.y - rb,
+        ny2 = d.y + rb;
+    quadtree.visit(function(quad, x1, y1, x2, y2) {
+      if (quad.point && (quad.point !== d)) {
+        var x = d.x - quad.point.x,
+            y = d.y - quad.point.y,
+            l = Math.sqrt(x * x + y * y);
+          if (l < rb) {
+          l = (l - rb) / l * alpha;
+          d.x -= x *= l;
+          d.y -= y *= l;
+          quad.point.x += x;
+          quad.point.y += y;
+        }
+      }
+      return x1 > nx2 || x2 < nx1 || y1 > ny2 || y2 < ny1;
+    });
+  };
+}
+
+});
+
+</script>

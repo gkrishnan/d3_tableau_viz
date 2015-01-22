@@ -1,0 +1,19 @@
+{
+ "name": "Cars",
+ "children": [
+  {
+   "name": "Comparisons",
+   "children": [
+    {
+     "name": "Retail Price",
+     "children": [
+      {"name": "Acura", "size": 42938.57},
+      {"name": "Audi", "size": 43307.89},
+      {"name": "Honda", "size": 21434.71},
+      {"name": "Hyundai", "size": 17476.5}
+     ]
+    }
+   ]
+  }
+ ]
+}

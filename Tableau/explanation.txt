@@ -1,0 +1,13 @@
+Q2.2
+1. To maintain high data to ink ratio, remove columns with all values=0.
+2. Proper formatting of all cols with decimal points, to maintain uniformity.
+3. Font unformity: Sans Serif used, headings bold
+4. Easy visibility: value 1 in columns with (0/1) highlighted
+5. Added line separators grouping similar cars
+6. Highlighted max and min values with dark and light hues of a color in every value col
+
+
+Q2.3a,Q2.3b. 
+A set of aesthetically pleasing combinations were chosen from the colorbrewer schemes, which are known to be color blind safe. The x axis labels were trimmed to be displayed with no overlap and axis labels were added for both axes. With respect to Tableau, the  automatic recommended color selection was used. The labels, axes and a legend was added as well to the output.
+
+Q2.4. The creative visualization used is a bubble chart. 4 individual charts are used to compare the parameters of the car manufacturers. The average values have been calculated for each of the 5 parameters. They have been color coded according to the feature they represent. Each bubble has a label indicating the name of the manufacturer and a tooltip indicating the parameter value. Radii are proportional to values and scaled ideally. Tooltips included to indicate the data values in case the user is interested in knowing them. For the last chart both HWY MPG and City MPG are included since they are best compared on a single graph and are very relevant parameters. Also in this case, City MPG < HWY MPG. Color scheme used is the category 20 due to its nice selection of colors.
